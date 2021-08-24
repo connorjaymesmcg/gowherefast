@@ -48,6 +48,8 @@ const List = () => {
         </Select>
       </FormControl>
       <Grid container spacing={3} className={classes.list}>
+
+        {/* Iterate through places array and render in a list */}
         {places?.map((place, index) => (
           <Grid item key={index} xs={12}>
             <PlaceDetails place={place} />

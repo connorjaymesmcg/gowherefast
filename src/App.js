@@ -1,6 +1,7 @@
 import React from 'react';
 import { CssBaseline, Grid } from '@material-ui/core';
 
+import { getPlacesData } from './api';
 import Header from './Components/Header/Header';
 import List from './Components/List/List';
 import Map from './Components/Map/Map';
