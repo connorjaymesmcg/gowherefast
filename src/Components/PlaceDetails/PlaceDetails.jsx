@@ -38,10 +38,20 @@ const PlaceDetails = ({ place }) => {
           <Chip key={name} size='small' label={name} className={classes.chip} />
         ))}
         {place?.address && (
-          <Typography gutterBottom variant='body2' color='textSecondary' className={classes.subtitle}>
+          <Typography gutterBottom variant='subtitle2' color='textSecondary' className={classes.subtitle}>
             <LocationOnIcon /> {place.address}
           </Typography>
         )}
+        {place?.phone && (
+          <Typography gutterBottom variant='subtitle2' color='textSecondary' className={classes.spacing}>
+            <PhoneIcon /> {place.phone}
+          </Typography>
+        )}
+        <CardActions>
+          <Button size='small' color='primary' onClick={() => window.open(place.web_url, '_blank')}>
+            Trip Advisor
+          </Button>
+        </CardActions>
       </CardContent>
     </Card>
   );
