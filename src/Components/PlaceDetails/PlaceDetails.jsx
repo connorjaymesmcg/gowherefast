@@ -6,13 +6,15 @@ import Rating from '@material-ui/lab/Rating';
 
 import useStyles from './styles';
 
-const PlaceDetails = ({ place }) => {
-  console.log(place);
+const PlaceDetails = ({ place, selected, refProp }) => {
+
 
   const classes = useStyles();
 
+  if (selected) refProp?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
   return (
-    <Card elevation={6}>
+    <Card elevation={6} ref={refProp} >
       <CardMedia
         style={{ height: 350 }}
         image={place.photo ? place.photo.images.large.url : 'https://images.unsplash.com/photo-1599458252573-56ae36120de1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80'}
@@ -20,6 +22,10 @@ const PlaceDetails = ({ place }) => {
       />
       <CardContent>
         <Typography gutterBottom variant='h5'>{place.name ? place.name : '(entry not found)'}</Typography>
+        <Box display='flex' justifyContent='space-between'>
+          <Rating value={Number(place.rating)} readOnly />
+          <Typography gutterBottom variant='subtitle1'>out of {place.num_reviews} reviews</Typography>
+        </Box>
         <Box display='flex' justifyContent='space-between'>
           <Typography variant='subtitle1'>Price</Typography>
           <Typography gutterBottom variant='subtitle1'>{place.price_level}</Typography>
@@ -50,6 +56,9 @@ const PlaceDetails = ({ place }) => {
         <CardActions>
           <Button size='small' color='primary' onClick={() => window.open(place.web_url, '_blank')}>
             Trip Advisor
+          </Button>
+          <Button size='small' color='primary' onClick={() => window.open(place.website, '_blank')}>
+            Website
           </Button>
         </CardActions>
       </CardContent>
