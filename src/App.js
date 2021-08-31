@@ -9,15 +9,14 @@ import PlaceDetails from './Components/PlaceDetails/PlaceDetails';
 
 const App = () => {
   const [places, setPlaces] = useState([]);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [childClicked, setChildClicked] = useState(null);
-
   const [coords, setCoords] = useState({});
   const [bounds, setBounds] = useState({});
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [type, setType] = useState('restaurants');
   const [rating, setRating] = useState('');
+
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
@@ -25,24 +24,36 @@ const App = () => {
     });
   }, []);
 
-  useEffect(() => {
-    setIsLoading(true);
 
-    getPlacesData(type, bounds.sw, bounds.ne)
-      .then((data) => {
-        setPlaces(data);
-        setIsLoading(false);
-      });
-  }, [type, coords, bounds]);
+  useEffect(() => {
+    const filteredPlaces = places.filter((place) => place.rating > rating);
+    setFilteredPlaces(filteredPlaces);
+  }, [rating]);
+
+
+  useEffect(() => {
+    if (bounds.sw && bounds.ne) {
+      setIsLoading(true);
+      getPlacesData(type, bounds.sw, bounds.ne)
+        .then((data) => {
+          setPlaces(data?.filter((place) => place.name && place.num_reviews > 0));
+          setFilteredPlaces([]);
+          setIsLoading(false);
+        });
+    }
+  }, [type, bounds]);
+
+  console.log(places);
+  console.log(filteredPlaces);
 
   return (
     <>
       <CssBaseline />
-      <Header />
+      <Header setCoords={setCoords} />
       <Grid container spacing={3} style={{ width: '100%' }}>
         <Grid item xs={12} md={4}>
           <List
-            places={places}
+            places={filteredPlaces.length ? filteredPlaces : places}
             childClicked={childClicked}
             isLoading={isLoading}
             type={type}
@@ -57,7 +68,7 @@ const App = () => {
             setCoords={setCoords}
             setBounds={setBounds}
             coords={coords}
-            places={places}
+            places={filteredPlaces.length ? filteredPlaces : places}
             setChildClicked={setChildClicked}
           />
         </Grid>
