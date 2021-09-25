@@ -39,7 +39,7 @@ const Header = ({ setCoords }) => {
           </Box>
         </Toolbar>
       </AppBar>
-    </div>
+    </div >
   );
 };
 
